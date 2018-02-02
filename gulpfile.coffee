@@ -8,6 +8,9 @@ rename = require 'gulp-rename'
 coffee = require 'gulp-coffee'
 plumber = require 'gulp-plumber'
 
+# Will only for static projects as it uses a node.js server
+browserSync = require('browser-sync').create()
+
 # By default only outputting minified css
 # Uncomment `.pipe gulp.dest 'site/css'` to output standard css
 gulp.task 'sass', ->
@@ -30,6 +33,28 @@ gulp.task 'coffee', ->
       bare: true
     # .pipe plumber.stop()
     .pipe gulp.dest 'site/js'
+
+# BrowserSync reload tasks
+gulp.task 'sass-reload', ['sass'], (done) ->
+  browserSync.reload()
+  done()
+
+gulp.task 'coffee-reload', ['coffee'], (done) ->
+  browserSync.reload()
+  done()
+
+gulp.task 'reload-nocheck', (done) ->
+  browserSync.reload()
+  done()
+
+# assumes index.html is contained within /site directory
+gulp.task 'sync', ['sass', 'coffee'], ->
+  browserSync.init
+    server:
+      baseDir: './site/'
+  gulp.watch 'site/dev/scss/*.scss', ['sass-reload']
+  gulp.watch 'site/dev/coffee/*.coffee', ['coffee-reload']
+  gulp.watch 'site/**/*.html', ['reload-nocheck']
 
 # For use from CLI
 # Uncomment `plumber` pipes to prevent `gulp watch` crashing on errors
