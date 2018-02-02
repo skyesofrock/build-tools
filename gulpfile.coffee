@@ -7,6 +7,8 @@ prefix = require 'gulp-autoprefixer'
 rename = require 'gulp-rename'
 coffee = require 'gulp-coffee'
 plumber = require 'gulp-plumber'
+maps = require 'gulp-sourcemaps'
+uglify = require 'gulp-uglify'
 
 # Will only for static projects as it uses a node.js server
 browserSync = require('browser-sync').create()
@@ -16,6 +18,7 @@ browserSync = require('browser-sync').create()
 gulp.task 'sass', ->
   gulp.src 'site/dev/scss/*.scss'
     # .pipe plumber()
+    .pipe maps.init()
     .pipe sass()
     .pipe prefix 'last 2 versions'
     # .pipe gulp.dest 'site/css'
@@ -23,14 +26,21 @@ gulp.task 'sass', ->
       zindex: false
     .pipe rename
       extname: '.min.css'
+    .pipe maps.write './map'
     # .pipe plumber.stop()
     .pipe gulp.dest 'site/css'
 
 gulp.task 'coffee', ->
   gulp.src 'site/dev/coffee/*.coffee'
     # .pipe plumber()
+    .pipe maps.init()
     .pipe coffee
       bare: true
+    # .pipe gulp.dest 'site/js'
+    .pipe uglify()
+    .pipe rename
+      extname: '.min.js'
+    .pipe maps.write './map'
     # .pipe plumber.stop()
     .pipe gulp.dest 'site/js'
 

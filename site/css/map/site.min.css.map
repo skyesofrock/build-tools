@@ -1,0 +1,1 @@
+{"version":3,"sources":["site.scss","_variables.scss"],"names":[],"mappings":"AAEA,EACE,UCHU,CDIX,AAED,GACI,uBAAuB,AACvB,cAAe,CAClB","file":"../site.min.css","sourcesContent":["@import 'variables';\n\n* {\n  color: $black;\n}\n\nh1 {\n    font-family: sans-serif;\n    font-size: 48px;\n}\n","$black: #333;\n"]}
